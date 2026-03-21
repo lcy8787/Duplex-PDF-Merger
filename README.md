@@ -1,5 +1,7 @@
 # Duplex PDF Merger
 
+[繁體中文](README_zh.md)
+
 A fast, client-side utility designed to seamlessly merge and properly reorder single-sided scanned odd and even PDF pages into a complete document. Fully supports reverse-ordered even pages commonly produced by ADF (Automatic Document Feeder) scanners.
 
 ---
