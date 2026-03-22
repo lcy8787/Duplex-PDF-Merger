@@ -1,0 +1,97 @@
+/* ============================================
+   Layout & Responsive Design
+   ============================================ */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: var(--card-bg);
+    padding: 35px 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    max-width: 550px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+h1 {
+    font-size: 22px;
+    margin: 0;
+    color: var(--text-main);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.options {
+    margin: var(--spacing-md) 0 var(--spacing-xl) 0;
+    display: flex;
+    align-items: center;
+    background-color: var(--input-bg);
+    padding: var(--spacing-md) 15px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.options label {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    user-select: none;
+}
+
+.note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 25px 20px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,343 @@
+/* ============================================
+   PDF Preview Styles
+   ============================================ */
+
+.preview-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: var(--input-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.preview-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-panel-header {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-main);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.preview-canvas-wrapper {
+    background-color: white;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pdf-canvas {
+    max-width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-sm);
+}
+
+.page-info {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: var(--spacing-md);
+}
+
+.pdf-thumbnails-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: var(--spacing-md);
+}
+
+.pdf-thumbnail {
+    width: 100%;
+    height: auto;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.pdf-thumbnail:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.pdf-thumbnail.active {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+/* Page count display */
+.page-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: var(--spacing-sm);
+}
+
+.page-count strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Progress bar enhancements */
+.merge-progress-wrapper {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--input-bg);
+    border-radius: var(--radius-md);
+    display: none;
+}
+
+.merge-progress-wrapper.active {
+    display: block;
+}
+
+.progress-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-details {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-percentage {
+    text-align: right;
+    font-size: 11px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Drag & drop area enhancement */
+.file-input-wrapper.drag-active {
+    border-color: var(--primary-color);
+    background-color: #c3e7ff;
+    box-shadow: inset 0 0 8px rgba(43, 108, 176, 0.2);
+}
+
+/* Responsive design for preview */
+@media (max-width: 900px) {
+    .preview-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Batch merge section */
+.batch-section {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: var(--input-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.batch-section-header {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-main);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.batch-item {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.batch-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.batch-item-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.batch-item-number {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.batch-remove-btn {
+    background: none;
+    border: none;
+    color: var(--error-color);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.batch-remove-btn:hover {
+    color: #c53030;
+    text-decoration: underline;
+}
+
+.batch-add-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    width: 100%;
+}
+
+.batch-add-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.batch-merge-all-btn {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    width: 100%;
+    margin-top: var(--spacing-lg);
+}
+
+.batch-merge-all-btn:hover {
+    background-color: #2d6e47;
+}
+
+.batch-merge-all-btn:disabled {
+    background-color: var(--disabled-bg);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Batch items container */
+.batch-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    min-height: 60px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    background-color: white;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.batch-items-container .batch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background-color: white;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    margin: 0;
+    transition: all var(--transition-fast);
+}
+
+.batch-items-container .batch-item:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.batch-items-container .batch-item.pending {
+    border-left: 4px solid var(--warning-color);
+}
+
+.batch-items-container .batch-item.processing {
+    border-left: 4px solid var(--primary-color);
+    background-color: #f0f7ff;
+}
+
+.batch-items-container .batch-item.completed {
+    border-left: 4px solid var(--success-color);
+    background-color: #f1f8f6;
+}
+
+.batch-items-container .batch-item.failed {
+    border-left: 4px solid var(--error-color);
+    background-color: #fff5f5;
+}
+
+.batch-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.batch-filename {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-main);
+}
+
+.batch-status {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.batch-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.batch-item-actions button {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    background-color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.batch-item-actions button:hover {
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+    color: white;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: var(--spacing-md) 0;
+    margin: 0;
+}
