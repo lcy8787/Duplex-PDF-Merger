@@ -1,8 +1,7 @@
 /**
  * Enhanced UI Module
- * User interface with preview, drag-drop, batch merge, and progress
+ * User interface with preview, drag-drop, and progress tracking
  */
-
 import { getDict, getTranslation } from './i18n.js';
 import { generateDefaultFilename, formatFileSize, validateOutputFilename, validatePdfs } from './validators.js';
 import { mergePdfs, getPdfPageCount, downloadFile } from './pdfMerger.js';
@@ -14,7 +13,6 @@ export class UI {
     constructor() {
         this.currentLang = 'zh';
         this.isProcessing = false;
-        this.batchItems = [];
         this.previewOdd = null;
         this.previewEven = null;
         
@@ -62,8 +60,7 @@ export class UI {
             progressBar: document.getElementById('progressBar'),
             progressPercent: document.getElementById('progressPercent'),
             
-            // Batch merge elements
-            batchItemsContainer: document.getElementById('batchItemsContainer'),
+
         };
     }
 
@@ -105,28 +102,6 @@ export class UI {
         // Merge button
         if (this.elements.mergeBtn) {
             this.elements.mergeBtn.addEventListener('click', () => this.handleMergeClick());
-        }
-
-        // Batch merge buttons
-        const addBatchBtn = document.getElementById('addBatchBtn');
-        if (addBatchBtn) {
-            addBatchBtn.addEventListener('click', () => {
-                if (this.elements.oddPdf?.files[0] && this.elements.evenPdf?.files[0]) {
-                    const outputFileName = this.elements.outputFileName?.value || 'merged.pdf';
-                    this.addBatchItem(
-                        this.elements.oddPdf.files[0],
-                        this.elements.evenPdf.files[0],
-                        outputFileName
-                    );
-                } else {
-                    this.showNotification(getDict().selectFilesFirst || 'Please select both PDF files first', 'warning');
-                }
-            });
-        }
-
-        const mergeBatchBtn = document.getElementById('mergeBatchAllBtn');
-        if (mergeBatchBtn) {
-            mergeBatchBtn.addEventListener('click', () => this.mergeBatchAll());
         }
 
         // Drag and drop
@@ -328,144 +303,6 @@ export class UI {
     hideProgressBar() {
         if (this.elements.progressWrapper) {
             this.elements.progressWrapper.classList.remove('active');
-        }
-    }
-
-    /**
-     * Add a batch merge item
-     * @param {File} oddFile - Odd pages PDF
-     * @param {File} evenFile - Even pages PDF
-     * @param {string} outputFileName - Output filename
-     */
-    addBatchItem(oddFile, evenFile, outputFileName) {
-        if (!oddFile || !evenFile || !outputFileName) {
-            this.showNotification(getDict().batchItemError || 'Please select both files and filename', 'warning');
-            return;
-        }
-
-        const item = {
-            id: Date.now(),
-            oddFile,
-            evenFile,
-            outputFileName,
-            status: 'pending' // pending, processing, completed, failed
-        };
-
-        this.batchItems.push(item);
-        this.updateBatchUI();
-        this.showNotification(getDict().batchItemAdded || `Added to batch: ${outputFileName}`, 'success');
-    }
-
-    /**
-     * Remove a batch item by ID
-     * @param {number} itemId - Item ID
-     */
-    removeBatchItem(itemId) {
-        this.batchItems = this.batchItems.filter(item => item.id !== itemId);
-        this.updateBatchUI();
-    }
-
-    /**
-     * Update batch merge UI display
-     */
-    updateBatchUI() {
-        const container = this.elements.batchItemsContainer;
-        if (!container) return;
-
-        container.innerHTML = '';
-
-        if (this.batchItems.length === 0) {
-            container.innerHTML = '<p class="empty-message">No batch items added yet</p>';
-            const mergeBatchBtn = document.getElementById('mergeBatchAllBtn');
-            if (mergeBatchBtn) mergeBatchBtn.disabled = true;
-            return;
-        }
-
-        this.batchItems.forEach(item => {
-            const itemEl = document.createElement('div');
-            itemEl.className = `batch-item ${item.status}`;
-            itemEl.innerHTML = `
-                <div class="batch-item-info">
-                    <span class="batch-filename">${item.outputFileName}</span>
-                    <span class="batch-status">${item.status}</span>
-                </div>
-                <div class="batch-item-actions">
-                    <button class="batch-remove-btn" data-id="${item.id}">✕</button>
-                </div>
-            `;
-
-            const removeBtn = itemEl.querySelector('.batch-remove-btn');
-            removeBtn.addEventListener('click', () => this.removeBatchItem(item.id));
-
-            container.appendChild(itemEl);
-        });
-
-        const mergeBatchBtn = document.getElementById('mergeBatchAllBtn');
-        if (mergeBatchBtn) mergeBatchBtn.disabled = false;
-    }
-
-    /**
-     * Merge all batch items
-     */
-    async mergeBatchAll() {
-        if (this.batchItems.length === 0) {
-            this.showNotification(getDict().noBatchItems || 'No batch items to merge', 'warning');
-            return;
-        }
-
-        this.showProgressBar();
-        const totalItems = this.batchItems.length;
-
-        try {
-            for (let index = 0; index < this.batchItems.length; index++) {
-                const item = this.batchItems[index];
-                item.status = 'processing';
-                this.updateBatchUI();
-
-                try {
-                    // Create file objects for merging
-                    const oddBuffer = await item.oddFile.arrayBuffer();
-                    const evenBuffer = await item.evenFile.arrayBuffer();
-
-                    const reverse = this.elements.reverseEven?.checked ?? true;
-                    const merged = await mergePdfs(oddBuffer, evenBuffer, reverse);
-
-                    // Download merged file
-                    downloadFile(merged, item.outputFileName);
-
-                    item.status = 'completed';
-
-                    // Update progress
-                    const progress = ((index + 1) / totalItems) * 100;
-                    this.setProgress(progress);
-
-                    // Save to history
-                    saveMergeHistory({
-                        oddFileName: item.oddFile.name,
-                        evenFileName: item.evenFile.name,
-                        outputFileName: item.outputFileName,
-                        timestamp: new Date().toISOString(),
-                        status: 'success'
-                    });
-
-                } catch (error) {
-                    console.error(`Failed to merge item ${index + 1}:`, error);
-                    item.status = 'failed';
-                    this.showNotification(`Failed: ${item.outputFileName}`, 'error');
-                }
-
-                this.updateBatchUI();
-            }
-
-            this.showNotification(getDict().batchMergeComplete || 'Batch merge completed', 'success');
-            this.batchItems = [];
-            this.updateBatchUI();
-
-        } catch (error) {
-            console.error('Batch merge error:', error);
-            this.showNotification(getDict().batchMergeError || 'Batch merge failed', 'error');
-        } finally {
-            this.hideProgressBar();
         }
     }
 
